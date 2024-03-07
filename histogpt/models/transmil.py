@@ -1,6 +1,6 @@
 """ 
 PyTorch TransMIL Model
-© Zhuchen Shao
+© Zhuchen Shao / Tsinghua University
 """
 
 import torch

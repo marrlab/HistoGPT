@@ -1,5 +1,5 @@
 """
-Pytorch Lightning Language Modeling
+Pytorch Lightning LM Trainer
 © Manuel Tran / Helmholtz Munich
 """
 

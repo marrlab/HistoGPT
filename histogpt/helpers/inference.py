@@ -1,3 +1,8 @@
+""" 
+HistoGPT Inference Helper Functions
+Author: Manuel Tran / Helmholtz Munich
+"""
+
 import h5py
 import torch
 import torch.nn.functional as F

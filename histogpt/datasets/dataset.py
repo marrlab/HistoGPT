@@ -1,6 +1,6 @@
 """ 
-PyTorch HistoGPT Model
-© Manuel Tran / Helmholtz Munich
+PyTorch HistoGPT Dataset
+Author: Manuel Tran / Helmholtz Munich
 """
 
 import h5py

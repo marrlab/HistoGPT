@@ -14,7 +14,6 @@ from torch.nn import functional as F
 from torch.optim.lr_scheduler import _LRScheduler
 from pytorch_metric_learning import losses
 
-#-------------------------------------------------------------------------------
 
 class WarmupCosineAnnealingLR(_LRScheduler):
     """
@@ -48,7 +47,6 @@ class WarmupCosineAnnealingLR(_LRScheduler):
                 for base_lr in self.base_lrs
             ]
 
-#-------------------------------------------------------------------------------
 
 class LightningCLS(pl.LightningModule):
     def __init__(self, cfg, model):

@@ -1,6 +1,6 @@
 """ 
 PyTorch Lightning MIL Trainer
-© Manuel Tran / Helmholtz Munich
+Author: Manuel Tran / Helmholtz Munich
 """
 
 import torch

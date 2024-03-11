@@ -1,12 +1,12 @@
 """ 
 PyTorch BioGPT Model
-Authors: HuggingFace / Microsoft
+Author: HuggingFace / Microsoft
 
 PyTorch Flamingo Model
-Authors: Lucidrain / DeepMind
+Author: Lucidrain / DeepMind
 
 PyTorch HistoGPT Model
-Authors: Manuel Tran / Helmholtz Munich
+Author: Manuel Tran / Helmholtz Munich
 """
 
 import json

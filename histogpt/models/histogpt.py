@@ -59,18 +59,23 @@ def _make_causal_mask(
             [torch.zeros(tgt_len, past_key_values_length, dtype=dtype), mask],
             dim=-1,
         )
-    return mask[None,
-                None, :, :].expand(bsz, 1, tgt_len, tgt_len + past_key_values_length)
+    return mask[None, None, :, :].expand(
+        bsz, 1, tgt_len, tgt_len + past_key_values_length
+    )
 
 
-def _expand_mask(mask: torch.Tensor, dtype: torch.dtype, tgt_len: Optional[int] = None):
+def _expand_mask(
+    mask: torch.Tensor, dtype: torch.dtype, tgt_len: Optional[int] = None
+):
     """
     Expands the attention mask from `[bsz, len]` to `[bsz, 1, tgt_len, src_len]`.
     """
     bsz, src_len = mask.size()
     tgt_len = tgt_len if tgt_len is not None else src_len
 
-    expanded_mask = (mask[:, None, None, :].expand(bsz, 1, tgt_len, src_len).to(dtype))
+    expanded_mask = (
+        mask[:, None, None, :].expand(bsz, 1, tgt_len, src_len).to(dtype)
+    )
     inverted_mask = 1.0 - expanded_mask
 
     return inverted_mask.masked_fill(
@@ -101,7 +106,9 @@ class PRConfig(NamedTuple):
 
 
 class MaskedCrossAttention(nn.Module):
-    def __init__(self, *, dim, dim_head=64, heads=8, only_attend_immediate_media=True):
+    def __init__(
+        self, *, dim, dim_head=64, heads=8, only_attend_immediate_media=True
+    ):
         super().__init__()
         self.scale = dim_head**-0.5
         self.heads = heads
@@ -142,7 +149,9 @@ class MaskedCrossAttention(nn.Module):
                 rearrange(text_time, 'b i -> b 1 i 1'),
                 repeat(media_time, 'j -> 1 1 1 (j m)', m=m)
             )
-            sim = sim.masked_fill(~text_to_media_mask, -torch.finfo(sim.dtype).max)
+            sim = sim.masked_fill(
+                ~text_to_media_mask, -torch.finfo(sim.dtype).max
+            )
 
         sim = sim - sim.amax(dim=-1, keepdim=True).detach()
         attn = sim.softmax(dim=-1)
@@ -184,8 +193,8 @@ class GatedCrossAttentionBlock(nn.Module):
         self.ff_gate = nn.Parameter(torch.tensor([0.]))
 
     def forward(self, x, media, media_locations=None):
-        x = self.attn(x, media,
-                      media_locations=media_locations) * self.attn_gate.tanh() + x
+        x = self.attn(x, media, media_locations=media_locations
+                     ) * self.attn_gate.tanh() + x
         x = self.ff(x) * self.ff_gate.tanh() + x
         return x
 
@@ -247,9 +256,6 @@ class PerceiverResampler(nn.Module):
         return self.norm(latents)
 
 
-#--------------------------------------------------------------------------------
-
-
 class HistoGPTLearnedPositionalEmbedding(nn.Embedding):
     """
     HistoGPT Learned Positional Embeddings
@@ -264,7 +270,9 @@ class HistoGPTLearnedPositionalEmbedding(nn.Embedding):
         super().__init__(num_embeddings + self.offset, embedding_dim)
 
     def forward(
-        self, attention_mask: torch.LongTensor, past_key_values_length: int = 0
+        self,
+        attention_mask: torch.LongTensor,
+        past_key_values_length: int = 0
     ):
         """
         `input_ids_shape` is expected to be [bsz x seq_len]
@@ -272,7 +280,8 @@ class HistoGPTLearnedPositionalEmbedding(nn.Embedding):
         attention_mask = attention_mask.long()
 
         positions = (
-            torch.cumsum(attention_mask, dim=1).type_as(attention_mask) * attention_mask
+            torch.cumsum(attention_mask, dim=1).type_as(attention_mask) *
+            attention_mask
         ).long() - 1
         positions = positions[:, past_key_values_length:]
 
@@ -324,7 +333,8 @@ class HistoGPTAttention(nn.Module):
         attention_mask: Optional[torch.Tensor] = None,
         layer_head_mask: Optional[torch.Tensor] = None,
         output_attentions: bool = False,
-    ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
+    ) -> Tuple[torch.Tensor, Optional[torch.Tensor],
+               Optional[Tuple[torch.Tensor]]]:
         """
         input shape: batch x time x channel
         """
@@ -371,15 +381,19 @@ class HistoGPTAttention(nn.Module):
                 attn_weights.view(bsz, self.num_heads, tgt_len, src_len) +
                 attention_mask
             )
-            attn_weights = attn_weights.view(bsz * self.num_heads, tgt_len, src_len)
+            attn_weights = attn_weights.view(
+                bsz * self.num_heads, tgt_len, src_len
+            )
 
         attn_weights = nn.functional.softmax(attn_weights, dim=-1)
 
         if layer_head_mask is not None:
-            attn_weights = layer_head_mask.view(1, -1, 1, 1) * attn_weights.view(
-                bsz, self.num_heads, tgt_len, src_len
+            attn_weights = layer_head_mask.view(
+                1, -1, 1, 1
+            ) * attn_weights.view(bsz, self.num_heads, tgt_len, src_len)
+            attn_weights = attn_weights.view(
+                bsz * self.num_heads, tgt_len, src_len
             )
-            attn_weights = attn_weights.view(bsz * self.num_heads, tgt_len, src_len)
 
         if output_attentions:
             attn_weights_reshaped = attn_weights.view(
@@ -397,7 +411,9 @@ class HistoGPTAttention(nn.Module):
         )
 
         attn_output = torch.bmm(attn_probs, value_states)
-        attn_output = attn_output.view(bsz, self.num_heads, tgt_len, self.head_dim)
+        attn_output = attn_output.view(
+            bsz, self.num_heads, tgt_len, self.head_dim
+        )
         attn_output = attn_output.transpose(1, 2)
         attn_output = attn_output.reshape(bsz, tgt_len, self.embed_dim)
         attn_output = self.out_proj(attn_output)
@@ -508,12 +524,16 @@ class HistoGPTPreTrainedModel(PreTrainedModel):
         initialize the weights
         """
         if isinstance(module, nn.Linear):
-            module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
+            module.weight.data.normal_(
+                mean=0.0, std=self.config.initializer_range
+            )
             if module.bias is not None:
                 module.bias.data.zero_()
 
         elif isinstance(module, nn.Embedding):
-            module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
+            module.weight.data.normal_(
+                mean=0.0, std=self.config.initializer_range
+            )
             if module.padding_idx is not None:
                 module.weight.data[module.padding_idx].zero_()
 
@@ -572,7 +592,9 @@ class HistoGPTModel(HistoGPTPreTrainedModel):
                     [
                         GatedCrossAttentionBlock(
                             dim=config.hidden_size,
-                            dim_head=(config.hidden_size // config.num_attention_heads),
+                            dim_head=(
+                                config.hidden_size // config.num_attention_heads
+                            ),
                             heads=config.num_attention_heads,
                             ff_mult=4,
                             only_attend_immediate_media=True
@@ -635,14 +657,15 @@ class HistoGPTModel(HistoGPTPreTrainedModel):
             if output_attentions is not None else self.config.output_attentions
         )
         output_hidden_states = (
-            output_hidden_states
-            if output_hidden_states is not None else self.config.output_hidden_states
+            output_hidden_states if output_hidden_states is not None else
+            self.config.output_hidden_states
         )
 
         use_cache = use_cache if use_cache is not None else self.config.use_cache
 
         return_dict = (
-            return_dict if return_dict is not None else self.config.use_return_dict
+            return_dict
+            if return_dict is not None else self.config.use_return_dict
         )
 
         if input_ids is not None and inputs_embeds is not None:
@@ -659,7 +682,9 @@ class HistoGPTModel(HistoGPTPreTrainedModel):
             input = inputs_embeds[:, :, -1]
 
         else:
-            raise ValueError("You have to specify either input_ids or inputs_embeds")
+            raise ValueError(
+                "You have to specify either input_ids or inputs_embeds"
+            )
 
         past_key_values_length = (
             past_key_values[0][0].shape[2] if past_key_values is not None else 0
@@ -739,7 +764,9 @@ class HistoGPTModel(HistoGPTPreTrainedModel):
                 layer_outputs = decoder_layer(
                     hidden_states,
                     attention_mask=attention_mask,
-                    layer_head_mask=(head_mask[idx] if head_mask is not None else None),
+                    layer_head_mask=(
+                        head_mask[idx] if head_mask is not None else None
+                    ),
                     past_key_value=past_key_value,
                     output_attentions=output_attentions,
                     use_cache=use_cache,
@@ -748,7 +775,9 @@ class HistoGPTModel(HistoGPTPreTrainedModel):
             hidden_states = layer_outputs[0]
 
             if use_cache:
-                next_decoder_cache += (layer_outputs[2 if output_attentions else 1], )
+                next_decoder_cache += (
+                    layer_outputs[2 if output_attentions else 1],
+                )
 
             if output_attentions:
                 all_self_attns += (layer_outputs[1], )
@@ -822,7 +851,8 @@ class HistoGPTForCausalLM(HistoGPTPreTrainedModel):
         the labels **are shifted** inside the model
         """
         return_dict = (
-            return_dict if return_dict is not None else self.config.use_return_dict
+            return_dict
+            if return_dict is not None else self.config.use_return_dict
         )
 
         outputs = self.histogpt(
@@ -843,7 +873,8 @@ class HistoGPTForCausalLM(HistoGPTPreTrainedModel):
         lm_loss = None
 
         if labels is not None:
-            shifted_prediction_scores = prediction_scores[:, :-1, :].contiguous()
+            shifted_prediction_scores = prediction_scores[:, :-1, :].contiguous(
+            )
             labels = labels[:, 1:].contiguous()
             loss_fct = CrossEntropyLoss()
             lm_loss = loss_fct(
@@ -897,7 +928,8 @@ class HistoGPTForCausalLM(HistoGPTPreTrainedModel):
         for layer_past in past_key_values:
             reordered_past += (
                 tuple(
-                    past_state.index_select(0, beam_idx) for past_state in layer_past
+                    past_state.index_select(0, beam_idx)
+                    for past_state in layer_past
                 ),
             )
         return reordered_past

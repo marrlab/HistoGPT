@@ -1,3 +1,8 @@
+""" 
+HistoGPT Training Helper Functions
+Author: Manuel Tran / Helmholtz Munich
+"""
+
 import torch
 
 

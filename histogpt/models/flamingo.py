@@ -1,6 +1,6 @@
 """ 
 PyTorch Flamingo Model
-© Lucidrain / Deepmind
+Author: Lucidrain / Deepmind
 """
 
 import torch
@@ -10,10 +10,10 @@ from functools import wraps
 from torch import nn, einsum
 from einops import rearrange, repeat
 
-#--------------------------------------------------------------------------------
 
 def exists(val):
     return val is not None
+
 
 def _many(fn):
     @wraps(fn)
@@ -22,10 +22,10 @@ def _many(fn):
 
     return inner
 
+
 rearrange_many = _many(rearrange)
 repeat_many = _many(repeat)
 
-#--------------------------------------------------------------------------------
 
 class FeedForward(nn.Module):
     """
@@ -48,7 +48,6 @@ class FeedForward(nn.Module):
     def forward(self, x):
         return self.net(x)
 
-#--------------------------------------------------------------------------------
 
 class PerceiverAttention(nn.Module):
     """
@@ -100,7 +99,6 @@ class PerceiverAttention(nn.Module):
 
         return out
 
-#--------------------------------------------------------------------------------
 
 class PerceiverResampler(nn.Module):
     """
@@ -156,7 +154,6 @@ class PerceiverResampler(nn.Module):
 
         return self.norm(ltn)
 
-#--------------------------------------------------------------------------------
 
 class MaskedCrossAttention(nn.Module):
     """
@@ -227,7 +224,6 @@ class MaskedCrossAttention(nn.Module):
 
         return out
 
-#--------------------------------------------------------------------------------
 
 class GatedCrossAttentionBlock(nn.Module):
     """

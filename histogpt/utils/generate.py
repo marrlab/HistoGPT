@@ -7,7 +7,7 @@ from transformers import top_k_top_p_filtering
 
 def generate(model, device, prompt, image, length=256, top_k=40, top_p=0.95, temp=0.7):
     """  
-    autoregressive generation using top-k and top-p sampling
+    autoregressive generation of reports using top-k, top-p, and temperature sampling
     """
     model.eval()
     image = image.to(device)

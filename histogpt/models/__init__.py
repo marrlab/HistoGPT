@@ -1,1 +1,1 @@
-from histogpt import *
+from .histogpt import *

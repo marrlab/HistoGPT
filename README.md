@@ -19,7 +19,13 @@ We trained HistoGPT on a large-scale dataset of 6,000 patient-report pairs from 
 
 ## HistoGPT simple and easy to use
 
-The forward pass of the model looks like this
+We can install HistoGPT with the following commands
+```
+!pip install flamingo-pytorch --no-deps
+!pip install git+https://github.com/marrlab/HistoGPT
+```
+
+The forward pass of the model then looks like this
 ```python
 import torch
 from transformers import BioGptConfig

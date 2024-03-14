@@ -1,10 +1,10 @@
-import setuptools
+from setuptools import setup, find_packages
 
-setuptools.setup(
+setup(
     name="histogpt",
     version="0.1.0",
     description="HistoGPT - PyTorch",
-    packages=setuptools.find_packages(),
+    packages=find_packages(exclude=[]),
     install_requires=[
         #"torch>=2.1.0",
         #"transformers>=4.37.2",

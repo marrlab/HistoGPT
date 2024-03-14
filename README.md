@@ -1,5 +1,3 @@
-<div style="text-align: justify">
-  
 # HistoGPT
 
 [[medRxiv]()] [[huggingface](https://huggingface.co/marr-peng-lab/histogpt)]
@@ -19,5 +17,3 @@ We trained HistoGPT on a large-scale dataset of 6,000 patient-report pairs from 
 
 ## ToDo
 Make repository ready for publication!
-
-</div>

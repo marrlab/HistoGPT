@@ -4,12 +4,13 @@
 
 ## Generating highly accurate histopathology reports from whole slide images
 
-
 HistoGPT is a vision language foundation model for dermatopathology. The model takes multiple tissue sections from a patient as input and generates a highly accurate pathology report that includes the disease classification, tumor subtype prediction, tumor thickness estimation, and other important clinical information. Most importantly, HistoGPT is fully interpretable, as every word or phrase in the output text can be visualized in the original image.
 
 <img src="github/figure-1.png" width="800"/>
 
 ## HistoGPT learns from vision and language
+
+<img src="github/figure-1.png" width="800"/>
 
 ## HistoGPT was trained on over 10TB of data
 

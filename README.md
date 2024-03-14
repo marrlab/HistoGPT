@@ -20,7 +20,7 @@ We trained HistoGPT on a large-scale dataset of 6,000 patient-report pairs from 
 ## How to use HistoGPT
 
 The forward pass of the model looks like this
-```
+```python
 import torch
 from transformers import BioGptConfig
 from histogpt.models import HistoGPTForCausalLM, PRConfig

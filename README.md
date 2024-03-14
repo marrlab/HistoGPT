@@ -9,6 +9,7 @@ HistoGPT is a vision language foundation model for dermatopathology. The model t
 <img src="github/figure-1.png" width="800"/>
 
 ## HistoGPT learns from vision and language
+HistoGPT takes an whole slide image as input, tiles it into smaller image patches, extracts the feature vectors for each image patch with an image encoder, reduces the number of feature vectors to a fixed size with a perceiver resampler, and combines them with text features coming from a language model via interleaved cross-attention layers.
 
 <img src="github/figure-2.png" width="790"/>
 

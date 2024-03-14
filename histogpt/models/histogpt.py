@@ -84,7 +84,7 @@ def _expand_mask(
     )
 
 
-class PRConfig(NamedTuple):
+class PerceiverResamplerConfig(NamedTuple):
     '''
     Perceiver Resampler Configuration
 

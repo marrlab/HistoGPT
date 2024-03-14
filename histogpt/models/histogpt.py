@@ -551,7 +551,7 @@ class HistoGPTModel(HistoGPTPreTrainedModel):
     A transformer decoder model combined with a perceiver resampler using 
     interleaved gated cross-attention layers following Deepmind's Flamingo.
     """
-    def __init__(self, config: BioGptConfig, params: PRConfig):
+    def __init__(self, config: BioGptConfig, params: PerceiverResamplerConfig):
         super().__init__(config)
         self.config = config
         self.layerdrop = config.layerdrop

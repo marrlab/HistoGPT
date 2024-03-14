@@ -6,8 +6,10 @@ setup(
     description="HistoGPT - PyTorch",
     packages=find_packages(exclude=[]),
     install_requires=[
+        "einops>=0.4",
+        "einops-exts",
         "torch>=2.1.0",
         "transformers>=4.37.2",
-        "flamingo-pytorch>=0.1.2",
+        #"flamingo-pytorch>=0.1.2",
     ],
 )

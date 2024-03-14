@@ -23,14 +23,14 @@ The forward pass of the model looks like this
 ```python
 import torch
 from transformers import BioGptConfig
-from histogpt.models import HistoGPTForCausalLM, PRConfig
+from histogpt.models import HistoGPTForCausalLM, PerceiverResamplerConfig
 
-histogpt = HistoGPTForCausalLM(BioGptConfig(), PRConfig())
+histogpt = HistoGPTForCausalLM(BioGptConfig(), PerceiverResamplerConfig())
 
 text = torch.randint(0, 42384, (1, 256))
 image = torch.rand(1, 1024, 768)
 
-histogpt(text, image).logits.size()
+print(histogpt(text, image).logits.size())
 ```
 
 ## ToDo

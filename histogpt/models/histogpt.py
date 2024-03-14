@@ -90,8 +90,7 @@ class PRConfig(NamedTuple):
 
     Description:
     ------------
-    Contains all parameters required to 
-    define a perceiver resampler model.
+    Contains all parameters required to define a perceiver resampler model.
     '''
     dim_feats: int = 768
     dim_model: int = 1536
@@ -205,9 +204,8 @@ class PerceiverResampler(nn.Module):
     
     Description:
     ------------
-    A dimension reduction model that takes as 
-    input a variable number of image features 
-    and produces a fixed number of tokens.
+    A sequence dimension reduction model that takes as input a variable number 
+    of latent vectors and resamples them to a fixed number of latent vectors.
     """
     def __init__(
         self,
@@ -262,8 +260,7 @@ class HistoGPTLearnedPositionalEmbedding(nn.Embedding):
 
     Description:
     ------------
-    A linear layer that learns positional 
-    embeddings up to a fixed maximum size.
+    A linear layer that learns positional embeddings up to a fixed maximum size.
     """
     def __init__(self, num_embeddings: int, embedding_dim: int):
         self.offset = 2
@@ -294,8 +291,7 @@ class HistoGPTAttention(nn.Module):
 
     Description:
     ------------
-    The transformer self-attention mechanism with 
-    multiple heads using query, key, and values.
+    A standard transformer self-attention layer with multiple heads.
     """
     def __init__(
         self,
@@ -427,8 +423,8 @@ class HistoGPTDecoderLayer(nn.Module):
     
     Description:
     ------------
-    An autoregressive transformer decoder layer that uses
-    unidirectional attention masks for language modeling.
+    An autoregressive transformer decoder layer that uses an 
+    upper triangular attention mask for language modeling.
     """
     def __init__(self, config: BioGptConfig):
         super().__init__()
@@ -552,9 +548,8 @@ class HistoGPTModel(HistoGPTPreTrainedModel):
 
     Description:
     ------------
-    A transformer decoder combined with a perceiver resampler
-    using interleaved gated cross-attention layers following 
-    'Flamingo: A Visual Language Model for Few-Shot Learning'.
+    A transformer decoder model combined with a perceiver resampler using 
+    interleaved gated cross-attention layers following Deepmind's Flamingo.
     """
     def __init__(self, config: BioGptConfig, params: PRConfig):
         super().__init__(config)

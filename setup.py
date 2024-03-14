@@ -6,8 +6,8 @@ setup(
     description="HistoGPT - PyTorch",
     packages=find_packages(exclude=[]),
     install_requires=[
-        #"torch>=2.1.0",
-        #"transformers>=4.37.2",
+        "torch>=2.1.0",
+        "transformers>=4.37.2",
         "flamingo-pytorch>=0.1.2",
     ],
 )

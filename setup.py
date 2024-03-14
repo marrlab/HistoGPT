@@ -10,6 +10,7 @@ setup(
         "einops-exts",
         "torch>=2.1.0",
         "transformers>=4.37.2",
+        "sacremoses>=0.1.1",
         #"flamingo-pytorch>=0.1.2",
     ],
 )

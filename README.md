@@ -16,5 +16,22 @@ HistoGPT is a vision language foundation model for dermatopathology. The model t
 
 We trained HistoGPT on a large-scale dataset of 6,000 patient-report pairs from over 12,000 whole slide images (WSIs) of over 150 different skin conditions (healthy, inflammatory, cancerous, ...) provided by the Department of Dermatology at the Technical University of Munich (TUM). To test our model, we extensively evaluated HistoGPT on five external cohorts from five different countries, including a dataset of 1,300 patient-report pairs from the Department of Dermatology at the University Hospital Münster (UKM).
 
+
+## How to use HistoGPT
+
+The forward pass of the model looks like this
+```
+import torch
+from transformers import BioGptConfig
+from histogpt.models import HistoGPTForCausalLM, PRConfig
+
+histogpt = HistoGPTForCausalLM(BioGptConfig(), PRConfig())
+
+text = torch.randint(0, 42384, (1, 256))
+image = torch.rand(1, 1024, 768)
+
+histogpt(text, image).logits.size()
+```
+
 ## ToDo
 Make repository ready for publication!

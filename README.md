@@ -17,8 +17,7 @@ HistoGPT takes an whole slide image as input, tiles it into smaller image patche
 
 We trained HistoGPT on a large-scale dataset of 6,000 patient-report pairs from over 12,000 whole slide images (WSIs) of over 150 different skin conditions (healthy, inflammatory, cancerous, ...) provided by the Department of Dermatology at the Technical University of Munich (TUM). To test our model, we extensively evaluated HistoGPT on five external cohorts from five different countries, including a dataset of 1,300 patient-report pairs from the Department of Dermatology at the University Hospital Münster (UKM).
 
-
-## How to use HistoGPT
+## HistoGPT simple and easy to use
 
 The forward pass of the model looks like this
 ```python

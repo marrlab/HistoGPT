@@ -1,6 +1,6 @@
 # HistoGPT
 
-[[medRxiv]()] [[huggingface](https://huggingface.co/marr-peng-lab/histogpt)]
+[[preprint]()] [[weights](https://huggingface.co/marr-peng-lab/histogpt)]
 
 ## Generating highly accurate histopathology reports from whole slide images
 

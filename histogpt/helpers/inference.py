@@ -9,7 +9,7 @@ import torch.nn.functional as F
 
 from tqdm import tqdm
 from transformers import top_k_top_p_filtering
-from clam.wsi_core.WholeSlideImage import WholeSlideImage
+'from clam.wsi_core.WholeSlideImage import WholeSlideImage
 
 
 def generate(
@@ -30,6 +30,9 @@ def generate(
                 with torch.autocast(device_type='cuda', dtype=torch.float16):
                     logits = model(inputs, image.float()).logits
                     logits = logits[:, -1, :] / temp
+            else:
+                logits = model(inputs, image.float()).logits
+                logits = logits[:, -1, :] / temp
 
             #logits[:, mask] = float('-inf')
             logits = top_k_top_p_filtering(logits=logits, top_k=40, top_p=0.95)
@@ -54,6 +57,7 @@ def generate(
     return out
 
 
+""" REFACTORED CODE NOT TESTED YET!
 def visualize(
     model, tokenizer, source, target, feats_path, slide_path, save_path, device='cuda'
 ):
@@ -128,3 +132,4 @@ def visualize(
         cmap='Spectral_r'
     )
     viz[1].save(save_path)
+"""

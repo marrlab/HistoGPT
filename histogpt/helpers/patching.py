@@ -95,9 +95,13 @@ def get_models(device):
     ToDo: add loop that iterates over a list of models and adds them to model_dicts
     """
     model_dicts = []
-    model_name = 'resnet18'
+    model_name = 'ctranspath'
 
-    model = torchvision.models.resnet18()
+    model = ctranspath()
+    model.head = nn.Identity()
+    #state_dict = torch.load(CTRANSPATH_PATH)
+    #model.load_state_dict(state_dict['model'], strict=True)
+    
     model.to(device)
     model.eval()
 

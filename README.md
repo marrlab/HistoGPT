@@ -119,3 +119,4 @@ main(configs)
 - [ ] implement ensemble refinement
 - [ ] create an accessible zero-shot tool
 - [ ] add visualization examples
+- [ ] add classifier guidance

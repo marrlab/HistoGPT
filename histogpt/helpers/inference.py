@@ -35,7 +35,7 @@ def generate(
                 logits = logits[:, -1, :] / temp
 
             #logits[:, mask] = float('-inf')
-            logits = top_k_top_p_filtering(logits=logits, top_k=40, top_p=0.95)
+            logits = top_k_top_p_filtering(logits=logits, top_k=top_k, top_p=top_p)
 
             probs = F.softmax(logits, dim=-1)
             probs = probs.squeeze(0)

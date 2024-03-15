@@ -9,7 +9,7 @@ import torch.nn.functional as F
 
 from tqdm import tqdm
 from transformers import top_k_top_p_filtering
-'from clam.wsi_core.WholeSlideImage import WholeSlideImage
+#from clam.wsi_core.WholeSlideImage import WholeSlideImage
 
 
 def generate(

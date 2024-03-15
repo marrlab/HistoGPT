@@ -1,6 +1,6 @@
 # HistoGPT
 
-[[preprint]()] [[weights](https://huggingface.co/marr-peng-lab/histogpt)]  [[notebook](https://github.com/marrlab/HistoGPT/blob/main/histogpt_notebook.ipynb)]
+[[preprint]()] [[weights](https://huggingface.co/marr-peng-lab/histogpt)]  [[notebook](https://github.com/marrlab/HistoGPT/blob/updates/tutorial.ipynb)]
 
 ## Generating highly accurate histopathology reports from whole slide images
 
@@ -63,7 +63,7 @@ output = generate(
 print(output.size())
 ```
 
-After downloading the model weight, we can generate pathology reports from image features. A step-by-step guide is provided in the notebook "histogpt_notebook.ipynb".
+After downloading the model weight, we can generate pathology reports from image features. A step-by-step guide is provided in the notebook "tutorial.ipynb".
 ```python
 import h5py
 from transformers import BioGptTokenizer

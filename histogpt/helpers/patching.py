@@ -25,6 +25,8 @@ import torchvision.transforms as T
 from dataclasses import dataclass, field
 from torch.utils.data import Dataset, DataLoader
 
+from ..models.ctranspath import ctranspath
+
 
 @dataclass
 class PatchingConfigs:

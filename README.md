@@ -49,7 +49,7 @@ Autoregressive text generation can be started with
 ```python
 from histogpt.helpers.inference import generate
 
-out = generate(
+output = generate(
     model=histogpt,
     prompt=torch.randint(0, 42384, (1, 2)),
     image=torch.rand(1, 2, 768),
@@ -60,7 +60,7 @@ out = generate(
     device=device
 )
 
-print(out.size())
+print(output.size())
 ```
 
 After downloading the model weight, we can generate pathology reports from image features. A step-by-step guide is provided in the notebook "histogpt_notebook.ipynb".
@@ -116,5 +116,9 @@ main(configs)
 
 ## ToDo
 - [x] make repository ready for publication
-- [ ] implement ensemble refinement
-- [ ] create an accessible zero-shot tool
+- [x] implement ensemble refinement
+- [ ] implement classifier guidance
+- [ ] implement accessible zero-shot tools
+- [ ] add ensemble refinement examples
+- [ ] add classifier guidance examples
+- [ ] add visualization examples

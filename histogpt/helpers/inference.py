@@ -43,8 +43,8 @@ def generate(
             probs = F.softmax(logits, dim=-1)
             probs = probs.squeeze(0)
 
-            #pred = torch.multinomial(probs, num_samples=1)
-            pred = torch.argmax(logits, dim=1)
+            pred = torch.multinomial(probs, num_samples=1)
+            #pred = torch.argmax(logits, dim=1)
 
             if pred == 2:  # break at end token '</s>'
                 break

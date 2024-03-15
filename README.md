@@ -42,5 +42,56 @@ image = torch.rand(1, 1024, 768)
 print(histogpt(text, image).logits.size())
 ```
 
+Autoregressive text generation can be started with
+```python
+from histogpt.helpers.inference import generate
+
+out = generate(
+    model=histogpt,
+    prompt=torch.randint(0, 42384, (1, 2)),
+    image=torch.rand(1, 2, 768),
+    length=256,
+    top_k=40,
+    top_p=0.95,
+    temp=0.7,
+    device=device
+)
+
+print(out.size())
+```
+
+After the model weight is downloaded, we can generate pathology reports from image features. A step-by-step guide is provided in the notebook "histogpt_notebook.ipynb".
+```python
+import h5py
+from transformers import BioGptTokenizer
+
+PATH = '/content/histogpt-1b-6k-pruned.pth?download=true'
+state_dict = torch.load(PATH, map_location=device)
+histogpt.load_state_dict(state_dict, strict=True)
+
+tokenizer = BioGptTokenizer.from_pretrained("microsoft/biogpt")
+
+prompt = 'Final diagnosis:'
+prompt = torch.tensor(tokenizer.encode(prompt)).unsqueeze(0).to(device)
+
+with h5py.File('/content/2023-03-06 23.51.44.h5?download=true', 'r') as f:
+    features = f['feats'][:]
+    features = torch.tensor(features).unsqueeze(0).to(device)
+
+output = generate(
+    model=histogpt,
+    prompt=prompt,
+    image=features,
+    length=256,
+    top_k=40,
+    top_p=0.95,
+    temp=0.7,
+    device=device
+)
+
+decoded = tokenizer.decode(output[0, 1:])
+print(decoded)
+```
+
 ## ToDo
 Make repository ready for publication!

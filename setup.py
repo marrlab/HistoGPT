@@ -8,6 +8,7 @@ setup(
     install_requires=[
         "einops>=0.4",
         "einops-exts",
+        "openai>=1.14.0",
         #"openslide-python>=1.3.1",
         "sacremoses>=0.1.1",
         "slideio>=2.5.0",

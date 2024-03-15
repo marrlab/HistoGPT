@@ -61,9 +61,9 @@ def generate(
 def visualize(
     model, tokenizer, source, target, feats_path, slide_path, save_path, device='cuda'
 ):
-    """
-    visualize target words or phrases from the source report as features in the input
-    """
+    #"""
+    #visualize target words or phrases from the source report as features in the input
+    #"""
 
     with h5py.File(feats_path, 'r') as f:
         coordinates = f['coords'][:]

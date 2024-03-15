@@ -1,6 +1,6 @@
 # HistoGPT
 
-[[preprint]()] [[weights](https://huggingface.co/marr-peng-lab/histogpt)]  [[notebook](https://github.com/marrlab/HistoGPT/tutorial.ipynb)]
+[[preprint]()] [[weights](https://huggingface.co/marr-peng-lab/histogpt)]  [[notebook](https://github.com/marrlab/HistoGPT/main/tutorial.ipynb)]
 
 ## Generating highly accurate histopathology reports from whole slide images
 

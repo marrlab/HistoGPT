@@ -9,7 +9,7 @@ import torch.nn.functional as F
 
 from tqdm import tqdm
 from transformers import top_k_top_p_filtering
-#from clam.wsi_core.WholeSlideImage import WholeSlideImage
+from ..clam.wsi_core.WholeSlideImage import WholeSlideImage
 
 
 def generate(
@@ -57,13 +57,12 @@ def generate(
     return out
 
 
-""" REFACTORED CODE NOT TESTED YET!
 def visualize(
     model, tokenizer, source, target, feats_path, slide_path, save_path, device='cuda'
 ):
-    #"""
-    #visualize target words or phrases from the source report as features in the input
-    #"""
+    """
+    visualize target words or phrases from the source report as features in the input
+    """
 
     with h5py.File(feats_path, 'r') as f:
         coordinates = f['coords'][:]
@@ -132,4 +131,3 @@ def visualize(
         cmap='Spectral_r'
     )
     viz[1].save(save_path)
-"""

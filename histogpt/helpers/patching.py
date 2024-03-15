@@ -25,7 +25,7 @@ import torchvision.transforms as T
 from dataclasses import dataclass, field
 from torch.utils.data import Dataset, DataLoader
 
-from ..models.ctranspath import swin_tiny_patch4_window7_224
+from ..models.ctranspath import ConvStem, swin_tiny_patch4_window7_224
 
 
 @dataclass

@@ -4,6 +4,9 @@ Author: Manuel Tran / Helmholtz Munich
 """
 
 import h5py
+import openai
+import random
+import time
 import torch
 import torch.nn.functional as F
 
@@ -55,6 +58,76 @@ def generate(
             out = torch.cat((out, pred.unsqueeze(0)), dim=1)
 
     return out
+
+
+def chat_gpt(prompt, temperature, top_p):
+    response = openai.ChatCompletion.create(
+        model="gpt-4-turbo",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a helpful assistant."
+            },
+            {
+                "role": "user",
+                "content": prompt
+            },
+        ],
+        temperature=temperature,
+        top_p=top_p,
+        n=1,
+    )
+    return [response.choices[i].message.content for i in range(len(response.choices))]
+
+
+def api_call(prompt, retries, temperature, top_p):
+    for i in range(retries):
+        try:
+            response = chat_gpt(prompt, temperature, top_p)
+            return response
+        except Exception as E:
+            wait_time = (2**i) + random.random()
+            print(f"Error occurred: {E}. Retry #{i+1} in {wait_time} seconds.")
+            time.sleep(wait_time)
+    raise Exception("Max retries exceeded.")
+
+
+def ensemble_refinement(
+    model: torch.nn.Module,
+    tokenizer,
+    prompt: torch.tensor,
+    image: torch.tensor,
+    length: int,
+    top_k: int = 40,
+    top_p: float = 0.95,
+    temp: float = 1.0,
+    device: str = 'cuda',
+    num_samples: int = 10,
+    instruction: str = None,
+    gpt_temp: float = 1.0,
+    gpt_top_p: float = 1.0,
+    retries: int = 10,
+):
+    if instruction == None:
+        instruction = ("Summarize the following text. Be as accurate as possible!")
+
+    outputs = []
+    for _ in tqdm(range(num_samples)):
+        output = generate(
+            model=model,
+            prompt=prompt,
+            image=image,
+            length=length,
+            top_k=top_k,
+            top_p=top_p,
+            temp=temp,
+            device=device
+        )
+        outputs.append(output)
+    outputs = torch.concat(outputs, 1)
+
+    prompt = instruction + tokenizer.decode(outputs[0, 1:])
+    return api_call(prompt, retries, gpt_temp, gpt_top_p)[0]
 
 
 def visualize(

@@ -25,7 +25,7 @@ import torchvision.transforms as T
 from dataclasses import dataclass, field
 from torch.utils.data import Dataset, DataLoader
 
-from ..models.ctranspath import ctranspath
+from ..models.ctranspath import swin_tiny_patch4_window7_224
 
 
 @dataclass
@@ -97,7 +97,7 @@ def get_models(device):
     model_dicts = []
     model_name = 'ctranspath'
 
-    model = ctranspath()
+    model = swin_tiny_patch4_window7_224(embed_layer=ConvStem, pretrained=False)
     model.head = nn.Identity()
     #state_dict = torch.load(CTRANSPATH_PATH)
     #model.load_state_dict(state_dict['model'], strict=True)

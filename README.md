@@ -115,4 +115,6 @@ main(configs)
 ```
 
 ## ToDo
-Make repository ready for publication!
+- [x] make repository ready for publication
+- [ ] implement ensemble refinement
+- [ ] create an accessible zero-shot tool

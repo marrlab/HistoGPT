@@ -19,8 +19,13 @@ HistoGPT takes an whole slide image as input, tiles it into smaller image patche
 
 We can install HistoGPT with the following commands
 ```
-!pip install flamingo-pytorch --no-deps
-!pip install git+https://github.com/marrlab/HistoGPT
+pip install flamingo-pytorch --no-deps
+pip install git+https://github.com/marrlab/HistoGPT
+```
+
+For visualization, we also need
+```
+pip install openslide-python
 ```
 
 The forward pass of the model then looks like this

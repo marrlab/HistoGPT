@@ -116,7 +116,9 @@ main(configs)
 
 ## ToDo
 - [x] make repository ready for publication
-- [ ] implement ensemble refinement
-- [ ] create an accessible zero-shot tool
+- [x] implement ensemble refinement
+- [ ] implement classifier guidance
+- [ ] implement accessible zero-shot tools
+- [ ] add ensemble refinement examples
+- [ ] add classifier guidance examples
 - [ ] add visualization examples
-- [ ] add classifier guidance

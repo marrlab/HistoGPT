@@ -11,7 +11,7 @@ import torch
 import torch.nn.functional as F
 
 from tqdm import tqdm
-from transformers import top_k_top_p_filtering
+from transformers import top_k_top_p_filtering, PreTrainedTokenizer
 from ..clam.wsi_core.WholeSlideImage import WholeSlideImage
 
 
@@ -94,7 +94,7 @@ def api_call(prompt, retries, temperature, top_p):
 
 def ensemble_refinement(
     model: torch.nn.Module,
-    tokenizer,
+    tokenizer: PreTrainedTokenizer,
     prompt: torch.tensor,
     image: torch.tensor,
     length: int,

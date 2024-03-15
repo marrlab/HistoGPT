@@ -60,7 +60,7 @@ out = generate(
 print(out.size())
 ```
 
-After the model weight is downloaded, we can generate pathology reports from image features. A step-by-step guide is provided in the notebook "histogpt_notebook.ipynb".
+After downloading the model weight, we can generate pathology reports from image features. A step-by-step guide is provided in the notebook "histogpt_notebook.ipynb".
 ```python
 import h5py
 from transformers import BioGptTokenizer

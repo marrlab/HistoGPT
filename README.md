@@ -96,5 +96,23 @@ decoded = tokenizer.decode(output[0, 1:])
 print(decoded)
 ```
 
+To obtain the feature vectors, we use our extraction algorithm.
+``` python
+from histogpt.helpers.patching import main, PatchingConfigs
+
+configs = PatchingConfigs()
+configs.slide_path = '/content/slide_folder'
+configs.save_path = '/content/save_folder'
+configs.model_path = '/content/ctranspath.pth?download=true'
+configs.patch_size = 256
+configs.white_thresh = [170, 185, 175]
+configs.edge_threshold = 2
+configs.resolution_in_mpp = 0.0
+configs.downscaling_factor = 4.0
+configs.batch_size = 16
+
+main(configs)
+```
+
 ## ToDo
 Make repository ready for publication!

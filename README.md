@@ -121,4 +121,5 @@ main(configs)
 - [ ] implement accessible zero-shot tools
 - [ ] add ensemble refinement examples
 - [ ] add classifier guidance examples
+- [ ] add zero-shot learning examples
 - [ ] add visualization examples

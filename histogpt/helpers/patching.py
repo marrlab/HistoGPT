@@ -19,6 +19,7 @@ import numpy as np
 import pandas as pd
 import slideio
 import torch
+import torch.nn as nn
 import torchvision
 import torchvision.transforms as T
 

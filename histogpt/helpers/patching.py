@@ -40,6 +40,7 @@ class PatchingConfigs:
 
     slide_path: str = 'PATH'
     save_path: str = 'PATH'
+    model_path: str = 'PATH'
     file_extension: str = '.ndpi'
 
     save_patch_images: bool = False
@@ -91,7 +92,7 @@ class SlideDataset(Dataset):
         return img
 
 
-def get_models(device):
+def get_models(args, device):
     """
     ToDo: add loop that iterates over a list of models and adds them to model_dicts
     """
@@ -100,8 +101,8 @@ def get_models(device):
 
     model = swin_tiny_patch4_window7_224(embed_layer=ConvStem, pretrained=False)
     model.head = nn.Identity()
-    #state_dict = torch.load(CTRANSPATH_PATH)
-    #model.load_state_dict(state_dict['model'], strict=True)
+    state_dict = torch.load(args.model_path)
+    model.load_state_dict(state_dict['model'], strict=True)
     
     model.to(device)
     model.eval()
@@ -450,7 +451,7 @@ def main(args):
     slide_files = slide_files[start:end]
 
     # Get model dictionaries
-    model_dicts = get_models(device)
+    model_dicts = get_models(args, device)
 
     # Get the driver for the slide file extension
     driver = get_driver(args.file_extension)

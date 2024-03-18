@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="histogpt",
-    version="1.1.1",
+    version="1.1.2",
     description="HistoGPT - PyTorch",
     packages=find_packages(exclude=[]),
     install_requires=[

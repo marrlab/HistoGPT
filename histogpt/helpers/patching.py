@@ -45,6 +45,7 @@ class PatchingConfigs:
 
     save_patch_images: bool = False
     save_tile_preview: bool = False
+    preview_size: int = 4096
 
     white_thresh: list = field(default_factory=lambda: [175, 190, 178])
     black_thresh: list = field(default_factory=lambda: [0, 0, 0])

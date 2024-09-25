@@ -16,7 +16,9 @@ We trained HistoGPT on a large-scale dataset of 6,705 patient-report pairs from 
 ## HistoGPT simultaneously learns from vision and language
 HistoGPT takes a series of whole slide images as input, crops them into smaller image patches, extracts the feature vectors for each image patch with an image encoder (Uni), encodes the position information with a three-dimensional factorized position embedder (NaViT), downsamples them to a fixed number of latent vectors with a slide encoder (Perceiver Resampler), and combines them with text features from a language model (BioGPT) via interleaved tanh-gated cross-attention layers (XATTN).
 
-<img src="github/figure-2.png" width="790"/>
+<p align="center">
+  <img src="github/figure-2.png" width="500"/>
+</p>
 
 ## HistoGPT is simple and easy to use
 

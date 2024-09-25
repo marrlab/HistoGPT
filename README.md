@@ -5,7 +5,7 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/marrlab/HistoGPT/blob/main/tutorial-2.ipynb)
 
 ## Generating clinical-grade pathology reports from whole slide images
-HistoGPT is a vision language foundation model for dermatopathology. The model takes a series of tissue sections from the same patients as input and generates highly accurate pathologys report that includes the disease classification, tumor subtype prediction, tumor thickness estimation, and other important clinical information. Most importantly, HistoGPT is fully interpretable, as every word or phrase in the output text can be visualized in the original image.
+HistoGPT is a vision language foundation model for dermatopathology. The model takes a series of tissue sections from the same patient as input and generates a pathology report that includes the disease classification, tumor subtype prediction, tumor thickness estimation, and other important clinical information. Most importantly, HistoGPT is fully interpretable, as every word or phrase in the output text can be visualized in the original image.
 
 <img src="github/figure-1.png" width="800"/>
 

@@ -1,6 +1,6 @@
 # HistoGPT
 
-#### [[`Paper`]([https://arxiv.org/abs/2407.12511](https://www.medrxiv.org/content/10.1101/2024.03.15.24304211v2))] [[`Weights`](https://huggingface.co/marr-peng-lab/histogpt)] [[`Notebook`](https://github.com/marrlab/HistoGPT/blob/main/tutorial-2.ipynb))]
+#### [[`Paper`](https://www.medrxiv.org/content/10.1101/2024.03.15.24304211v2)] [[`Weights`](https://huggingface.co/marr-peng-lab/histogpt)] [[`Notebook`](https://github.com/marrlab/HistoGPT/blob/main/tutorial-2.ipynb))]
 
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/marrlab/HistoGPT/blob/main/tutorial-2.ipynb)

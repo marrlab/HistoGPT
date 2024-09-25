@@ -18,40 +18,37 @@ import math
 import numpy as np
 import pandas as pd
 import slideio
+import timm
 import torch
-import torch.nn as nn
-import torchvision
 import torchvision.transforms as T
 
 from dataclasses import dataclass, field
 from torch.utils.data import Dataset, DataLoader
 
-from ..models.ctranspath import ConvStem, swin_tiny_patch4_window7_224
-
 
 @dataclass
 class PatchingConfigs:
     #device: str = 'cuda'
-    batch_size: int = 256
+    batch_size: int = 16
 
     patch_size: int = 512
     downscaling_factor: float = 0.0
-    resolution_in_mpp: float = 1.0
+    resolution_in_mpp: float = 0.5
 
     slide_path: str = 'PATH'
     save_path: str = 'PATH'
     model_path: str = 'PATH'
-    file_extension: str = '.ndpi'
+    file_extension: str = '.svs'
 
     save_patch_images: bool = False
-    save_tile_preview: bool = False
+    save_tile_preview: bool = True
     preview_size: int = 4096
 
-    white_thresh: list = field(default_factory=lambda: [175, 190, 178])
+    white_thresh: list = field(default_factory=lambda: [240, 240, 240])
     black_thresh: list = field(default_factory=lambda: [0, 0, 0])
     calc_thresh: list = field(default_factory=lambda: [40, 40, 40])
     invalid_ratio_thresh: float = 0.3
-    edge_threshold: int = 1
+    edge_threshold: int = 2
 
     split: list[int] = field(default_factory=lambda: [0, 1])
     exctraction_list: str = None
@@ -98,19 +95,26 @@ def get_models(args, device):
     ToDo: add loop that iterates over a list of models and adds them to model_dicts
     """
     model_dicts = []
-    model_name = 'ctranspath'
+    model_name = 'uni-vit-l-16'
 
-    model = swin_tiny_patch4_window7_224(embed_layer=ConvStem, pretrained=False)
-    model.head = nn.Identity()
-    state_dict = torch.load(args.model_path)
-    model.load_state_dict(state_dict['model'], strict=True)
-    
+    model = timm.create_model(
+        "vit_large_patch16_224",
+        img_size=224,
+        patch_size=16,
+        init_values=1e-5,
+        num_classes=0,
+        dynamic_img_size=True,
+    )
+
+    state_dict = torch.load(args.model_path, map_location="cpu")
+    model.load_state_dict(state_dict, strict=True)
+
     model.to(device)
     model.eval()
 
-    mean = (0.48145466, 0.4578275, 0.40821073)
-    std = (0.26862954, 0.26130258, 0.27577711)
-    size = 224
+    mean = (0.485, 0.456, 0.406)
+    std = (0.229, 0.224, 0.225)
+    size = 512
 
     transforms = T.Compose(
         [
@@ -267,9 +271,8 @@ def save_hdf5(
                     "normal"
                 ) / f"{slide_name}.h5", "w"
             ) as f:
-                f["coords"] = coords.astype("float64")
-                f["feats"] = features
-                #f["args"] = json.dumps(vars(args))
+                f["coordinates"] = coords.astype("float64")
+                f["features"] = features
                 f["model_name"] = model_name
                 f["slide_sizes"] = slide_sizes
 
@@ -334,12 +337,13 @@ def patches_to_feature(
 
             dataset = SlideDataset(wsi, coords, args.patch_size, transform)
             dataloader = DataLoader(
-                dataset, batch_size=args.batch_size, num_workers=0, shuffle=False
+                dataset, batch_size=args.batch_size, num_workers=4, shuffle=False
             )
 
             for batch in dataloader:
                 batch = batch.to(device)
-                features = model(batch.float())
+                with torch.autocast(device_type="cuda", dtype=torch.float16):
+                    features = model(batch.float())
                 patches_features[model_name] += (features.cpu().numpy().tolist())
 
     return patches_features
@@ -376,7 +380,7 @@ def extract_features(
         wsi = scene.read_block(
             size=(int(scene.size[0] // scaling), int(scene.size[1] // scaling))
         )
-        #"""
+
         # Define the main loop that processes all patches
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures = []
@@ -397,22 +401,6 @@ def extract_features(
                     scene_coords = pd.concat(
                         [scene_coords, patches_coords], ignore_index=True
                     )
-            #"""
-        """
-        linspace = range(0, wsi.shape[0], args.patch_size)
-        desc = slide_name + "_" + str(scn)
-        # Iterate over x (width) of scene
-        for x in tqdm(linspace, position=1, leave=False, desc=desc):
-            # Check if a full patch still 'fits' in x direction
-            if x + args.patch_size > wsi.shape[0]:
-                continue
-            # Directly call the process_row function
-            patches_coords = process_row(wsi, scn, x, args, slide_name)
-            if len(patches_coords) > 0:
-                scene_coords = pd.concat(
-                    [scene_coords, patches_coords], ignore_index=True
-                )
-         """
 
         slide_coords = pd.concat([slide_coords, scene_coords], ignore_index=True)
 
@@ -493,9 +481,26 @@ def main(args):
     # Process slide files
     start = time.perf_counter()
     for slide_file in tqdm(slide_files, position=0, leave=False, desc="slides"):
-        slide = slideio.Slide(str(slide_file), driver)
         slide_name = slide_file.stem
-        extract_features(slide, slide_name, model_dicts, device, preview_path, args)
+
+        h5py_path = Path(args.save_path) / "h5_files" / (
+            f"{args.patch_size}px_"
+            f"{model_name}_"
+            f"{args.resolution_in_mpp}mpp_"
+            f"{args.downscaling_factor}xdown_"
+            "normal"
+        ) / f"{slide_name}.h5"
+
+        if h5py_path.exists():
+            print(f"File already processed: {slide_name}. Skip to next file!")
+            continue  # Skip the rest of the loop and move to the next file
+
+        try:
+            slide = slideio.Slide(str(slide_file), driver)
+            extract_features(slide, slide_name, model_dicts, device, preview_path, args)
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            continue
 
     end = time.perf_counter()
     elapsed_time = end - start
@@ -505,4 +510,19 @@ def main(args):
 
 if __name__ == "__main__":
     args = PatchingConfigs()
+
+    args.slide_path = './slide_folder'
+    args.save_path = '/save_folder'
+
+    args.model_path = './uni-vit-l-16.bin'
+
+    args.file_extension = '.svs'
+    assert args.patch_size == 512
+
+    args.resolution_in_mpp = 0.5
+    args.downscaling_factor = 0
+
+    args.batch_size = 64
+    #args.split = [1, 3] # second dataset split of 3 splits
+
     main(args)

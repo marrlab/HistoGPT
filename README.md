@@ -114,13 +114,3 @@ configs.batch_size = 16
 
 main(configs)
 ```
-
-## ToDo
-- [x] make repository ready for publication
-- [x] implement ensemble refinement
-- [ ] implement classifier guidance
-- [ ] implement accessible zero-shot tools
-- [ ] add ensemble refinement examples
-- [ ] add classifier guidance examples
-- [ ] add zero-shot learning examples
-- [ ] add visualization examples

@@ -11,7 +11,7 @@ setup(
         "openai>=1.14.0",
         #"openslide-python>=1.3.1",
         "sacremoses>=0.1.1",
-        "slideio>=2.5.0",
+        "slideio>=2.7.1",
         "torch>=2.1.0",
         "transformers==4.38.2",
         #"flamingo-pytorch>=0.1.2",

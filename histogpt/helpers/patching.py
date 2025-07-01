@@ -1,4 +1,4 @@
-""" 
+"""
 Whole Slide Image Patch Feature Extractor
 Author: Valentin Koch / Helmholtz Munich
 """
@@ -65,7 +65,7 @@ class PatchingConfigs:
 class SlideDataset(Dataset):
     def __init__(
         self,
-        slide: slideio.py_slideio.Slide,
+        slide: slideio.Slide,
         coordinates: pd.DataFrame,
         patch_size: int = 512,
         transform: list = None
@@ -104,7 +104,7 @@ def get_models(args, device):
     model.head = nn.Identity()
     state_dict = torch.load(args.model_path)
     model.load_state_dict(state_dict['model'], strict=True)
-    
+
     model.to(device)
     model.eval()
 
@@ -346,7 +346,7 @@ def patches_to_feature(
 
 
 def extract_features(
-    slide: slideio.py_slideio.Slide,
+    slide: slideio.Slide,
     slide_name: str,
     model_dicts: List[Dict],
     device: torch.device,

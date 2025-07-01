@@ -13,7 +13,7 @@ setup(
         "sacremoses>=0.1.1",
         "slideio>=2.5.0",
         "torch>=2.1.0",
-        "transformers>=4.37.2",
+        "transformers==4.38.2",
         #"flamingo-pytorch>=0.1.2",
     ],
 )
